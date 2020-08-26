@@ -56,7 +56,7 @@ sitenames<-buffer500$site
 summary(sitenames)
 
 #Combine site name and mean NDVI column
-NDVI_mean_500mbuffer<-cbind(sitenames, ext_mean)
+NDVI_mean_500mbuffer<-cbind(sitenames, ext_mean) #add max, min etc in final
 NDVI_mean_500mbuffer<-as.data.frame(NDVI_mean_500mbuffer)
 colnames(NDVI_mean_500mbuffer) <- c("Site", "Mean NDVI")
 head(NDVI_mean_500mbuffer)
