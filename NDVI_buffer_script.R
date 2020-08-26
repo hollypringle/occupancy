@@ -8,11 +8,8 @@ library(ggplot2)
 # set working directory
 setwd("G:/Landsat")
 
-# import the centroid data and the vegetation structure data
-# this means all strings of letter coming in will remain character
+#Read in site points
 #options(stringsAsFactors=FALSE)
-
-#Read in plot centroids
 #sites <- read.csv("Camera_locations.csv")
 #sites_df<-as.data.frame(sites)
 #str(sites)
@@ -31,7 +28,7 @@ rgb = stack(red, green, blue)
 plotRGB(rgb, stretch='hist')
 infrared = raster("LC08_L1TP_169061_20190920_20190926_01_T1_B5.TIF")
 
-# Perform raster algebra to calculate a raster of NDVI values
+# Calculate a raster of NDVI values
 ndvi = (infrared - red) / (infrared + red)
 str(ndvi)
 ndvi@crs
