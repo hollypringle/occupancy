@@ -62,7 +62,83 @@ write.csv(NDVI_500mbuffer, "NDVI_500m.csv")
 
 
 
+### scrap 
 
+# Load needed packages
+library(raster)
+library(rgdal)
+library(dplyr)
+
+# Method 3:shapefiles
+library(maptools)
+
+# plotting
+library(ggplot2)
+
+dev.off()
+
+# set working directory
+setwd("G:/Landsat")
+
+# import the centroid data and the vegetation structure data
+# this means all strings of letter coming in will remain character
+options(stringsAsFactors=FALSE)
+
+# read in plot centroids
+sites <- read.csv("Camera_locations.csv")
+str(sites)
+head(sites)
+
+#Calculate NDVI
+blue = raster("LC08_L1TP_169061_20190920_20190926_01_T1_B2.TIF")
+green = raster("LC08_L1TP_169061_20190920_20190926_01_T1_B3.TIF")
+red = raster("LC08_L1TP_169061_20190920_20190926_01_T1_B4.TIF")
+rgb = stack(red, green, blue)
+plotRGB(rgb, stretch='hist')
+
+# Load visible (red) and infrared bands
+red = raster("LC08_L1TP_169061_20190920_20190926_01_T1_B4.TIF")
+infrared = raster("LC08_L1TP_169061_20190920_20190926_01_T1_B5.TIF")
+
+# Perform raster algebra to calculate a raster of NDVI values
+ndvi = (infrared - red) / (infrared + red)
+str(ndvi)
+ndvi@crs
+
+#NDVI raster
+
+writeRaster(x = ndvi,
+            filename="G:/Landsat/ndvi_2019_GME_4.tif",
+            format = "GTiff", # save as a tif
+            datatype='INT2S', # save as a INTEGER rather than a float
+            overwrite = TRUE)  # OPTIONAL - be careful. This will OVERWRITE previous files.
+
+ndviraster<-raster("ndvi_2019_GME_4.tif")
+
+sites_spdf <- SpatialPointsDataFrame(
+  sites[,3:2], proj4string=ndviraster@crs, sites)
+sites_spdf
+plot(sites_spdf)
+cent_max <- raster::extract(ndviraster,             # raster layer
+                            coordinates,   # SPDF with centroids for buffer
+                            buffer = 100,     # buffer size, units depend on CRS
+                            fun=max,         # what to value to extract
+                            df=TRUE)     
+cent_max
+
+
+#Extract NDVi for points
+coordinates <- sites[, c("Longitude", "Latitude")]
+coordinates(coordinates) <- ~Longitude + Latitude
+proj4string(coordinates) <- CRS("+proj=utm +zone=36 +datum=WGS84 +units=m +no_defs +ellps=WGS84
++towgs84=0,0,0 ")
+
+
+# Define shapefile's current CRS
+projection(sites) <- CRS("+proj=utm +zone=36 +datum=WGS84 +units=m +no_defs +ellps=WGS84 +towgs84=0,0,0")
+ndviraster@crs
+coordinates@crs
+plot(coordinates, pch=20, main="Full Dataset", axes=TRUE)
 
 
 
