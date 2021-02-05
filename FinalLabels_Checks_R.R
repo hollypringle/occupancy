@@ -715,4 +715,13 @@ RemovedRows<- RemovedRows %>%
 RemovedRows$ReasonRemoved <- ifelse(RemovedRows$Two_Labels %in% c("TRUE"), "two_labels_same_box", RemovedRows$ReasonRemoved)
 RemovedRows$ReasonRemoved <- ifelse(RemovedRows$ReasonRemoved %in% c(NA), "duplicated_row", RemovedRows$ReasonRemoved)
 
+correcttags<-read.csv("Final2018Kenya_TagsOnly.csv")
+correcttags$dupfilepath<-NA
+correcttags$ReasonRemoved<-NA
+correcttags$Two_Labels<-NA
+correcttags$Duplicated_Row<-NA
+
+removed<-removed%>%select(X, image, xmin, ymin, xmax, ymax,Species, tagger, stage, FilePath, dupfilepath, ReasonRemoved, Two_Labels, Duplicated_Row)
+alltags<-rbind(removed, correcttags)
+write.csv(alltags, "Final2018Kenya_TagsOnly_withremoved.csv")
 
