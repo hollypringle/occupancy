@@ -397,8 +397,6 @@ newnoid$stage <- c("novretag") #change stage name
 meta <- read.csv("Kenya_CT2018_metadata.csv")
 correctednewnoid <- merge(newnoid,meta, by.x="image", by.y="ImageID", all.x=T)
 correctednewnoid$X<-NULL
-correctednewnoid$Subdirectory<-NULL
-correctednewnoid$File<-NULL
 head(correctednewnoid)
 correctednoid <- bind_rows(removednoid,correctednewnoid) #combine the old and new unidentified
 N.img.correctednoid<- length(unique(correctednoid$image))
@@ -411,8 +409,6 @@ N.img.newquery<- length(unique(newquery$image)) #57
 newquery$stage <- c("novretag") #change stage name
 correctednewquery<- merge(newquery,meta, by.x="image", by.y="ImageID", all.x=T)
 correctednewquery$X<-NULL
-correctednewquery$Subdirectory<-NULL
-correctednewquery$File<-NULL
 head(correctednewquery)
 correctedquery <- bind_rows(removedquery,correctednewquery) #combine the old and new unidentified
 N.img.correctedquery<- length(unique(correctedquery$image))
@@ -612,18 +608,6 @@ finalmetadatadec<-read.csv("Full2018Metadata_VDECEMBER_FINAL_WITHCHECKS.csv")
 
 finalmetadatadec$ConservancyID<-NULL
 head(finalmetadatadec)
-finalmetadatadec$Conservancy_name<-NULL
-finalmetadatadec$CT_site<-NULL
-finalmetadatadec$CT_id<-NULL
-finalmetadatadec$time_prop<-NULL
-finalmetadatadec$Date<-NULL
-finalmetadatadec$DateTime<-NULL
-finalmetadatadec$Time<-NULL
-finalmetadatadec$FilePath<-NULL
-finalmetadatadec$month<-NULL
-finalmetadatadec$time_rad<-NULL
-finalmetadatadec$time_hour<-NULL
-finalmetadatadec$Period<-NULL
 
 write.csv(finalmetadatadec, "Full2018Metadata_VDECEMBER_TAGSONLY.csv")
 N.img.finalmetadatadec<- length(unique(finalmetadatadec$image))
@@ -639,9 +623,6 @@ write.csv(tagswithmeta, "Full2018Metadata_VDECEMBER_TAGWITHMETA.csv")
 tagwithmetadata<-read.csv("Full2018Metadata_VDECEMBER_TAGWITHMETA.csv")
 head(tagwithmetadata)
 tagwithmetadata$X<-NULL
-tagwithmetadata$label_tagger_period<-NULL
-tagwithmetadata$label_tagger<-NULL
-
 
 write.csv(tagwithmetadata,"Full2018_tagsonly.csv")
 nrow(tagwithmetadata)
