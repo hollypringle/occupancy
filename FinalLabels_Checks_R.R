@@ -721,6 +721,8 @@ correcttags$ReasonRemoved<-NA
 correcttags$Two_Labels<-NA
 correcttags$Duplicated_Row<-NA
 
+#add removed tags back to tags
+removed<-read.csv("RemovedTags_2018Kenya.csv")
 removed<-removed%>%select(X, image, xmin, ymin, xmax, ymax,Species, tagger, stage, FilePath, dupfilepath, ReasonRemoved, Two_Labels, Duplicated_Row)
 alltags<-rbind(removed, correcttags)
 write.csv(alltags, "Final2018Kenya_TagsOnly_withremoved.csv")
